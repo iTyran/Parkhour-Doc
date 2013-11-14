@@ -1,0 +1,18 @@
+# Setting up Cocos2d-Html5 development environment (Mac and Windows)
+
+## Download Cocos2d-html5 and extract it to a directory
+ba la la.
+
+## Setting up Integrated Development Environment for developing Cocos2d-Html5 games.
+
+### Introduce WebStorm, what is it? way choose it?
+
+### Load HelloHTML5World project into WebStorm
+detail steps, need some picture.
+
+### Setting up Code Completion for Cocos2d-Html5 in WebStorm
+
+### Setting up living debug for Cocos2d-Html5 in WebStorm
+Recommended to install firefox or chrome with **JetBrains IDE Support extension**, work together with WebStrom.
+
+try set a breakpoint in HelloHTML5World, and test the living debug.
