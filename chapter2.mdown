@@ -1,0 +1,51 @@
+# 新建Parkour项目
+
+## 在Cocos2d-Html5 root 目录下新建parkour目录
+
+## 拷贝一份HelloHTML5World到parkour目录下。
+修改cocos2d.js文件里面的
+```
+engineDir:'../cocos2d/',
+```
+为
+```
+engineDir:'../../cocos2d/',
+```
+确保能正确调用到cocos2d库。
+双击index.html，确保能正确看到helloworld。
+
+
+## 修改canvas大小和DesignResolutionSize
+
+我们的程序图片资源设计大小以480x320分辨率布局，为了方便调试我们需要修改下面两项设置。
+
+* 打开index.html， 修改
+```
+<canvas id="gameCanvas" width="800" height="450"></canvas>
+```
+为
+```
+<canvas id="gameCanvas" width="480" height="320"></canvas>
+```
+* 打开main.js，修改
+```
+cc.EGLView.getInstance().setDesignResolutionSize(800, 450, cc.RESOLUTION_POLICY.SHOW_ALL);
+```
+为
+```
+cc.EGLView.getInstance().setDesignResolutionSize(480, 320, cc.RESOLUTION_POLICY.SHOW_ALL);
+```
+
+## 修改html的title,让它显示为Parkour
+打开index.html， 修改
+```
+<title>Cocos2d-html5 Hello World test</title>
+```
+为
+```
+<title>Parkour</title>
+```
+
+到此我们从HelloHTML5World拷贝出了一份新的项目，但是运行起来和HelloHTML5World机会没区别。在记下来的章加，我们将添加游戏的第一个界面，加入游戏封面和开始菜单。
+
+## 引擎目录结构介绍

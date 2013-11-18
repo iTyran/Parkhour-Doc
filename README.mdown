@@ -1,3 +1,25 @@
 # Parkour-Doc
 
-Record parkour game development steps.
+* 环境搭建
+* 如何新建一个项目，引擎目录结构介绍等。
+* 第一个游戏scene，封面和菜单。展示基本的scene，layer，sprite，menu用法。
+	* 扩展基本概念
+	* 结合游戏实现讲解
+* PlayScene overview,三个层职责介绍。
+* TiledMap实现background, 2张背景 map拼接循环。
+* Setting Up PlayLayer with Physics World, 引入chipmunk物理引擎知识。
+ 	* chipmunk of html5
+	* 创建一个往前走的精灵，没有动画。
+* 引入TexturePacker。精灵动起来。
+* 手势识别Simple Recognizer
+* 跳跃和蹲下的实现，如何切换动画。
+* 加入金币和障碍物到tiledmap，碰撞检测。
+* 加入声音，背景，声效果。
+	* 设置界面的实现。
+	* 加入音量控制 和 开关。
+* 加入最好成绩存储
+	* 引入storage模块用法。
+	* 引入table和输入框的实现。
+
+
+* $1 Unistroke Recognizer （option）
