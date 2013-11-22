@@ -1,0 +1,108 @@
+# 游戏主场景介绍
+
+游戏主场景由三个层组成，背景层，动画层，状态层。
+
+在src目录下新建文件PlayScene.js, 替换其内容如下：
+
+```
+var PlayScene = cc.Scene.extend({
+    onEnter:function () {
+        this._super();
+        this.addChild(new BackgroundLayer());
+        this.addChild(new AnimationLayer());
+        this.addChild(new StatusLayer());
+    }
+});
+```
+
+我们依次addChild了三个层到PlayScene，render的顺序和addChild的顺序有关，最先add的层会被后面的层覆盖。
+下面具体看每个层的实现。
+
+## 背景层
+显示背景图片。
+
+在src目录下新建文件BackgroundLayer.js, 加入下面的代码。
+
+```
+var BackgroundLayer = cc.Layer.extend({
+    ctor:function () {
+        this._super();
+        this.init();
+    },
+
+    init:function () {
+        this._super();
+
+        var centerPos = cc.p(winSize.width / 2, winSize.height / 2);
+        var spriteBG = cc.Sprite.create(s_PlayBG);
+        spriteBG.setPosition(centerPos);
+        this.addChild(spriteBG);
+    }
+});
+```
+
+背景层由一张背景图片组层，后面会替换为tiled map实现。
+sprite的创建和HelloLayer中的一样。
+
+## 动画层
+跑酷人物的显示，移动逻辑，游戏主逻辑在这个层。
+
+在src目录下新建文件AnimationLayer.js, 加入下面的代码
+
+```
+var AnimationLayer = cc.Layer.extend({
+    ctor:function () {
+        this._super();
+        this.init();
+    },
+
+    init:function () {
+        this._super();
+
+        var centerPos = cc.p(80, 85);
+        var spriteRunner = cc.Sprite.create(s_runner);
+        spriteRunner.setPosition(centerPos);
+        var actionTo = cc.MoveTo.create(2, cc.p(300, 85));
+        spriteRunner.runAction(cc.Sequence.create(actionTo));
+        this.addChild(spriteRunner);
+    }
+});
+```
+cc.MoveTo.create创建了一个animate, 由cc.Sequence.create创建一个action。
+spriteRunner.runAction让这精灵运行这个action。
+最后addChild让动画播放出来。
+
+
+## 状态层
+状态层主要显示金币数量，跑步路程等信心。
+
+```
+var StatusLayer = cc.Layer.extend({
+    labelCoin:null,
+    labelMeter:null,
+    coins:0,
+
+    ctor:function () {
+        this._super();
+        this.init();
+    },
+
+    init:function () {
+        this._super();
+
+        this.labelCoin = cc.LabelTTF.create("Coins:0", "Helvetica", 20);
+        this.labelCoin.setColor(cc.c3(0,0,0));//black Colour
+        this.labelCoin.setPosition(cc.p(70, winSize.height - 20));
+        this.addChild(this.labelCoin);
+
+        this.labelMeter = cc.LabelTTF.create("0M", "Helvetica", 20);
+        this.labelMeter.setPosition(cc.p(winSize.width - 70, winSize.height - 20));
+        this.addChild(this.labelMeter);
+    }
+});
+```
+
+cc.LabelTTF.create创建一个文字标签，第一个参数是显示的文字，第二个参数设置字体（可扩展下有那些字体可选择），第三个参数设置字体大小。
+
+LabelTTF的成员函数setColor可设置显示字体的颜色，cc.c3(0,0,0)表示黑色。
+
