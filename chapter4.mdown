@@ -1,6 +1,9 @@
 # 游戏主场景介绍
 
 游戏主场景由三个层组成，背景层，动画层，状态层。
+如下图所示：
+
+![PlayScene Overview](./PlaySceneOverview.png)
 
 在src目录下新建文件PlayScene.js, 替换其内容如下：
 
