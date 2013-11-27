@@ -1,0 +1,38 @@
+# 让主角动起来
+
+## 使用TexturePacker做帧动画
+
+为什么使用TexturePacker?  官方的介绍视频。
+
+使用步骤：
+
+* 打开TexturePacker，拖拽Chapter/TexturePacker下的runner0.png ~ runner.7.png到TexturePacker的sprite区域。
+* 选择date format为“cocos2d”
+* texture format为“png”， Cocos2d-html5所支持格式
+* 点击publish输出“runner.png“和“runner.plist”备用
+
+## 在Cocos2d－html5中调用
+
+### resource.js 中加入runner.plist的预加载
+
+### AnimationLayer的改动
+
+在layer前面加入新局部变量的声明
+
+```
+    spriteSheet:null,    runningAction:null,    sprite:null,
+```
+
+替换sprite的创建为下面的代码
+
+```
+        // create sprite sheet        cc.SpriteFrameCache.getInstance().addSpriteFrames(s_runnerplist);        this.spriteSheet = cc.SpriteBatchNode.create(s_runner);        this.addChild(this.spriteSheet);        // init runningAction        var animFrames = [];        for (var i = 0; i < 8; i++) {            var str = "runner" + i + ".png";            var frame = cc.SpriteFrameCache.getInstance().getSpriteFrame(str);            animFrames.push(frame);        }        var animation = cc.Animation.create(animFrames, 0.1);        this.runningAction = cc.RepeatForever.create(cc.Animate.create(animation));        this.sprite = cc.Sprite.createWithSpriteFrameName("runner0.png");        this.sprite.setPosition(cc.p(80, 85));        this.sprite.runAction(this.runningAction);        this.spriteSheet.addChild(this.sprite);
+```
+
+先创建一个BatchNode， 把它加入到layer， 基于这个BatchNode创建的sprite都将添加到BatchNode。
+
+从SpriteFrameCache创建帧动画。
+
+用第一帧创建精灵，并让它运行这个动画，把这个精灵添加到BatchNode。
+
+运行看效果吧。
