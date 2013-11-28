@@ -1,0 +1,83 @@
+# 初始化物理世界，让runner“跑”起来。
+
+## why physics engine? why chipmunk？
+
+物理引擎能让跑酷的跳起落下过程看起来更加证实。物理引擎里面包含了重力计算以及碰撞检测等。
+
+Cocos2d支持的物理引擎有 Box2d 和 [Chipmunk](http://chipmunk-physics.net/).
+
+chipmunk支持的能力要比Box2d多一些，这篇tutorial使用chipmunk来构建物理世界。
+
+bababba。。。。
+
+## 开启Cocos2d-Html5的chipmunk
+
+打开Cocos2d.js文件，修改
+
+```
+chipmunk:false,
+```
+
+为
+
+```
+chipmunk:true,
+```
+
+新建一个文件globals.js，并加入appFiles, 后面我们将用来存放一些全局变量或定义。
+
+```
+        appFiles:[            'src/resource.js',            'src/myApp.js',            'src/PlayScene.js',            'src/BackgroundLayer.js',            'src/AnimationLayer.js',            'src/StatusLayer.js',            "src/globals.js"        ]
+```
+
+## chipmunk的初始化
+
+打开 PlayScene.js, 加入新成员变量
+
+```
+space:null,
+```
+
+整个游戏中只会用到一个物理空间，它将被PlayScene中的其它layer使用到。所用它的初始化放在PlayScene.js是一个比较理想的位置。
+
+在添加其他layer之前我们需要初始化好space，新加入了一个成员函数initPhysics。
+
+```
+    // init space of chipmunk    initPhysics:function() {        this.space = new cp.Space();        // Gravity        this.space.gravity = cp.v(0, -350);        // set up Walls        var wallBottom = new cp.SegmentShape(this.space.staticBody,            cp.v(0, g_groundHight),// start point            cp.v(4294967295, g_groundHight),// MAX INT:4294967295            0);// thickness of wall        this.space.addStaticShape(wallBottom);    },
+```
+
+gravity设置系统的重力，SegmentShape第一个参数用的space的staticBody来创建一个static的shape，
+然后加入到space中，
+static的shape不受重力影响。通过创建一个无限长的地面，runner将跑在上面。
+
+接下来，我们需要启动PlayScene的**update()**, 游戏的每帧，物理引擎需要计算作用力对精灵位置的改变和碰撞检测。
+
+```
+    update:function (dt) {        // chipmunk step        this.space.step(dt);    }
+```
+
+## runner改为PhysicsSprite实现。
+
+打开AnimationLayer.js，
+首先我们需要修改构造函数ctor，为其添加一个传入参数，把space记录下来备用。
+
+```
+    ctor:function (space) {        this._super();        this.space = space;        this.init();    },
+```
+
+重新使用PhysicsSprite创建精灵。
+
+```
+        this.sprite = cc.PhysicsSprite.createWithSpriteFrameName("runner0.png");        var contentSize = this.sprite.getContentSize();        // init body        this.body = new cp.Body(1, cp.momentForBox(1, contentSize.width, contentSize.height));        this.body.p = cc.p(g_runnerStartX, g_groundHight + contentSize.height / 2);        this.body.applyImpulse(cp.v(150, 0), cp.v(0, 0));//run speed        this.space.addBody(this.body);        //init shape        this.shape = new cp.BoxShape(this.body, contentSize.width - 14, contentSize.height);        this.space.addShape(this.shape);        this.sprite.setBody(this.body);        this.sprite.runAction(this.runningAction);        this.spriteSheet.addChild(this.sprite);
+```
+
+* 创建body，设置body的位置，并给它一个向前的作用力。
+* 把body添加到space。
+* 为body添加一个shape，同样也需要添加到space。
+* this.sprite.setBody 绑定物理body到sprite
+
+## debug and run
+
+用webstorm跑起来后，我们会看到runner向前跑出了屏幕。
+
+在下一章，我们将移动摄像机，让它跟谁runner移动，并用tiledmap替换背景实现，然后让背景无限循环起来。
