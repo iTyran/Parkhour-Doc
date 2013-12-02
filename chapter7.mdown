@@ -1,0 +1,21 @@
+# 用TiledMap来设计背景图，让镜头跟随runner一起移动 
+
+## 让animationLayer的镜头跟随runner动起来
+
+* camera介绍
+* 坐标计算，camera的移动
+
+## Tiled Map地图制作
+
+### Tiled Map简介
+
+### Tiled Map制作跑酷的背景地图
+
+### 把游戏资源加入到工程
+
+## BackgroundLayer的重构
+
+加载tiledmap，地图循环逻辑，同样也需要移动camera。
+
+* 定义层tag
+* Animation层加入getEyeX
