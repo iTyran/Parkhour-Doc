@@ -1,0 +1,56 @@
+# 背景加入金币和障碍物
+
+## TiledMap加入object层
+
+展示如何在tiledmap中创建object层。
+
+## 新建一个background layer的sprite sheet
+
+TexterPacker 新建一个文件，加入金币和障碍物，以备使用。可引用前面章节的内容，简单说明就行。
+
+## backgroudlayer的重构
+
+* init加入spriteSheet初始化
+* 新加入一个loadObject函数，初始化每个map的objects，批量创建coin和rock，addChild到spriteSheet。
+* 新成员变量objects，用来记录所有加入的金币或障碍物。方便地图循环回收。
+* removeObjects()回收某张地图上的所有物体，removeObjectByShape，回收指定物体。
+* 在初始化和checkAndReload加入object创建和回收逻辑。
+
+## 新建Coin和Rock类
+
+### Coin
+
+Coin有动画，资源奴属于backgroudlayer 的 sprite sheet。
+
+coin是圆形物体，创建一个圆形的chipmunk shape，附加到body，再绑定到PhysicsSprite。设置好setCollisionType，以备碰撞检测的时候使用。
+
+下面是globals.js中新加入的tag定义
+
+```
+// collision type for chipmunkif(typeof SpriteTag == "undefined") {    var SpriteTag = {};    SpriteTag.runner = 0;    SpriteTag.coin = 1;    SpriteTag.rock = 2;};
+```
+
+Coin是直接继承于cc.Class，它自身没有removeFromParent方法，实现一个removeFromParent，在资源回收的时候将用到。
+
+getShape方法也是在资源回收的时候需要用到。
+
+### Rock
+
+rock和coin的实现差不多，区别有亮点。
+
+* rock没有动画
+* rock是矩形shape
+
+## PlayScene的改进
+
+BackgroudLayer 创建的时候传入space。
+
+shapesToRemove成员变量备用，模拟cpSpaceAddPostStepCallback需要用到， js的chipmunk街口和c的you些不一样。
+
+initPhysics加入碰撞检测回调的初始化。
+
+collisionCoinBegin对应runner碰到硬币的处理
+
+collisionRockBegin对应runner碰到rock的处理
+
+update里面我们加入对shapesToRemove的处理，模拟cpSpaceAddPostStepCallback，记住，不能直接在碰撞检测回调函数里面直接移除物理世界的body，shape。
