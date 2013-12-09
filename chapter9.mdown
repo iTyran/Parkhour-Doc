@@ -1,0 +1,41 @@
+# coin和meter更新，game over layer， 简单手势识别，实现跳跃
+
+## coin和meter更新
+
+StatusLayer 加入两个成员函数，用来更新coin数量和meter距离。
+
+切换到PlayScene.js
+
+collisionCoinBegin做如下处理
+
+```
+        var statusLayer = this.getChildByTag(TagOfLayer.Status);        statusLayer.addCoin(1);
+```
+
+切换到AnimationLayer.js， 在update中加入下面的代码。
+
+```
+        // update meter        var statusLayer = this.getParent().getChildByTag(TagOfLayer.Status);        statusLayer.updateMeter(this.sprite.getPositionX() - g_runnerStartX);
+```
+
+## 添加Game Over Layer
+
+是一个Color Layer，半透明浮在游戏界面上，中间一个restart游戏的button按钮。
+
+在PlayScene的collisionRockBegin 加入game over 逻辑
+
+```
+    collisionRockBegin:function (arbiter, space) {        cc.Director.getInstance().pause();        this.addChild(new GameOverLayer());    },
+```
+
+注意，我们让Director暂停了，为了restart的时候能重新游戏。我们在PlayScene的onEnter加入
+
+```
+cc.Director.getInstance().resume();
+```
+
+## SimpleRecognizer的实现解析
+
+## AnimationLayer加入跳跃动画，加入触摸事件处理，跳跃逻辑处理。
+
+分三点分别解析。
